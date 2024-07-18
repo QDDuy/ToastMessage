@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  
+</head>
+<body>
+    <div id="toast"></div>
+    <div>
+        <div onclick="showSuccessToast()" class="btn btn--success">Show Success</div>
+        <div onclick="showErrorToast()" class="btn btn--danger">Show error</div>
+        <div onclick="showInfoToast()" class="btn btn--info">Show info</div>
+        <div onclick="showWarningToast()" class="btn btn--warning">Show warning</div>
+    </div>
+    <script>
+        function toast({ title = '', msg = '', type = 'info', duration = 3000 }) {
+            const main = document.getElementById('toast');
+            if (main) {
+                const toast = document.createElement('div');
+                toast.classList.add('toast', `toast--${type}`);
+                
+                const icons = {
+                    success: 'fa-solid fa-circle-check',
+                    info: "fa-solid fa-circle-info",
+                    warning: "fa-solid fa-triangle-exclamation",
+                    error: "fa-solid fa-circle-exclamation",
+                }
+                
+                const icon = icons[type];
+                toast.innerHTML = `
+                    <div class="toast__icon">
+                        <i class="${icon}"></i>
+                    </div>
+                    <div class="toast__body">
+                        <h3 class="toast__title">${title}</h3>
+                        <p class="toast__msg">${msg}</p>
+                    </div>
+                    <div class="toast__close">
+                        <i class="fas fa-times"></i>
+                    </div>
+                `;
+
+                main.appendChild(toast);
+
+                const autoRemoveId = setTimeout(function() {
+                    main.removeChild(toast);
+                }, duration + 1000);
+
+                toast.onclick = function(e) {
+                    if (e.target.closest('.toast__close')) {
+                        main.removeChild(toast);
+                        clearTimeout(autoRemoveId);
+                    }
+                };
+            }
+        }
+
+        function showSuccessToast() {
+            toast({
+                title: 'Thành công',
+                msg: 'Đăng ký thành công',
+                type: 'success',
+                duration: 3000
+            });
+        }
+
+        function showErrorToast() {
+            toast({
+                title: 'Lỗi',
+                msg: 'Lỗi rồi bạn ơi',
+                type: 'error',
+                duration: 3000
+            });
+        }
+        function showInfoToast() {
+            toast({
+                title: 'Thông báo',
+                msg: 'Thông báo của bạn',
+                type: 'info',
+                duration: 3000
+            });
+        }
+        function showWarningToast() {
+            toast({
+                title: 'Cảnh báo',
+                msg: 'Cảnh báo bạn ơi',
+                type: 'warning',
+                duration: 3000
+            });
+        }
+    </script>
+</body>
+</html>
